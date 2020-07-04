@@ -34,7 +34,7 @@ class record:
 
     对于不同格式的记账单的例子，可在 github repo 中 tests 文件夹内的 demo*.csv 参考。
 
-    :param path: string for the csv file path
+    :param path: string for the csv file path or pd.DataFrame
     :param format: str. Default is "matrix". Can also be "list"。list 形式的账单更类似流水单。总共三列，每行由日期基金号和金额组成。
                 三栏标题分别为 date，fund 和 trade。其中日期的形式是 %Y/%m/%d. 该形式与默认的 matrix 不包含 "/" 不同。
     :param fund_property: bool. Default False. If True, 基金号下第一行的数字标记对应基金参数（暂时只支持 matrix 形式账单）。
@@ -45,7 +45,10 @@ class record:
     def __init__(
         self, path="input.csv", format="matrix", fund_property=False, **readkwds
     ):
-        df = pd.read_csv(path, **readkwds)
+        if isinstance(path, str):
+            df = pd.read_csv(path, **readkwds)
+        else:  # path itself is a pd.DataFrame
+            df = path
         if df.iloc[0]["date"] == "property":
             fund_property = True
         if format == "matrix":
@@ -131,7 +134,10 @@ class irecord(record):
     """
 
     def __init__(self, path="input.csv", **readkwds):
-        df = pd.read_csv(path, **readkwds)
+        if isinstance(path, str):
+            df = pd.read_csv(path, **readkwds)
+        else:
+            df = path
         df.fillna(0, inplace=True)
         df.date = [
             pd.to_datetime(df.iloc[i].date, format="%Y%m%d") for i in range(len(df))

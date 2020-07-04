@@ -1,7 +1,15 @@
 # Changelog
 ## Unreleased
+
+## v0.9.4 - 2020.07.02
+### added
+* record 可以直接处理内存中的 DataFrame 账单。
+* ioconf 增加自定义 key_func, 兼容缓存层对 key 支持不够的情况 （大小写不敏感，特殊字符等）
+
 ### fixed
 * evaluate 类的可视化函数补充 rendered 选项
+* 修正了 tradevolume 周数和 pandas 给出的 iso 周数不一定对应的问题
+* 修复了超高价转债债券收益率求解的 runtimeerror，直接返回 None
 
 ## v0.9.3 - 2020.06.20
 ### added
